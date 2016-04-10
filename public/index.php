@@ -89,7 +89,20 @@ $app->get('/instanceDetails/:h', function($instanceName) use ($app) {
 	else {
 		$preseedConfigExists = false;
 	}
+	
+	$instance_tags = array();
+	if (sizeof($instance["tags"] > 1)) {
+		for ($i=0; $i < sizeof($instance["tags"]); $i++) {
+			$current_tag = explode(":", $instance["tags"][$i]);
+			$instance_tags[$current_tag[0]]= $current_tag[1];
+		}
+	}
+	else {
+		$instance_tags["Tags"] = "NoSet";
+	}
+
 	$app->render('page_instancedetails.html', array( "config" => $config,
+		"tags" => $instance_tags,
 		"clusterName" => $clusterName,
 		"instance" => $instance,
 		"instance_dump" => print_r($instance,true),
